@@ -5,7 +5,7 @@ import * as UseCase from '../../../application/use-case';
 import { UsuarioDomain } from '../../../domain/models/usuario.model';
 import { Usuario } from '../../database/models/usuario.model';
 import { UsuarioRepository } from '../../database/repositories/usuario.repository';
-import { UsuarioController } from '../usuario.controller';
+import { UsuarioAPI } from '../usuario.api';
 
 jest.mock('../../../application/use-case/find.use-case');
 jest.mock('../../../application/use-case/create.use-case');
@@ -13,7 +13,7 @@ jest.mock('../../../application/use-case/update.use-case');
 jest.mock('../../../application/use-case/delete.use-case');
 
 describe('UsuarioController', () => {
-  let controller: UsuarioController;
+  let api: UsuarioAPI;
   let repository: UsuarioRepository;
 
   beforeEach(async () => {
@@ -24,14 +24,14 @@ describe('UsuarioController', () => {
           useValue: {},
         },
       ],
-      controllers: [UsuarioController],
+      controllers: [UsuarioAPI],
     }).compile();
-    controller = module.get<UsuarioController>(UsuarioController);
+    api = module.get<UsuarioAPI>(UsuarioAPI);
     repository = module.get<UsuarioRepository>(UsuarioRepository);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(api).toBeDefined();
   });
 
   it('should call repository.find', (done) => {
@@ -57,7 +57,7 @@ describe('UsuarioController', () => {
     } as any);
 
     // Act
-    const result = controller.find();
+    const result = api.find();
 
     // Assert
     expect(UseCase.FindUseCase).toHaveBeenCalledWith(repository);
@@ -88,7 +88,7 @@ describe('UsuarioController', () => {
     } as any);
 
     // Act
-    const result = controller.create(body);
+    const result = api.create(body);
 
     // Assert
     expect(UseCase.CreateUseCase).toHaveBeenCalledWith(repository);
@@ -118,7 +118,7 @@ describe('UsuarioController', () => {
     } as any);
 
     // Act
-    const result = controller.update(_id, body);
+    const result = api.update(_id, body);
 
     // Assert
     expect(UseCase.UpdateUseCase).toHaveBeenCalledWith(repository);
@@ -149,7 +149,7 @@ describe('UsuarioController', () => {
     } as any);
 
     // Act
-    const result = controller.delete(_id);
+    const result = api.delete(_id);
 
     // Assert
     expect(UseCase.DeleteUseCase).toHaveBeenCalledWith(repository);
