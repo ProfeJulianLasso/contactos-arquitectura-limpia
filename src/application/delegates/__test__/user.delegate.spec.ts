@@ -14,39 +14,21 @@ describe('UserDelegate', () => {
   let repository: IUserRepository;
 
   beforeEach(() => {
+    // Arrange
     repository = {
       create: jest.fn(),
       delete: jest.fn(),
       find: jest.fn(),
       update: jest.fn(),
     } as IUserRepository;
+
+    // Act
     delegator = new UserDelegate(repository);
   });
 
   it('should be defined', () => {
-    // Arrange
-    jest.spyOn(UseCase, 'FindUseCase').mockReturnValue({
-      execute: jest.fn(),
-    } as any);
-    jest.spyOn(UseCase, 'CreateUseCase').mockReturnValue({
-      execute: jest.fn(),
-    } as any);
-    jest.spyOn(UseCase, 'UpdateUseCase').mockReturnValue({
-      execute: jest.fn(),
-    } as any);
-    jest.spyOn(UseCase, 'DeleteUseCase').mockReturnValue({
-      execute: jest.fn(),
-    } as any);
-
-    // Act
-    delegator = new UserDelegate(repository);
-
     // Assert
     expect(delegator).toBeDefined();
-    expect(UseCase.FindUseCase).toHaveBeenCalledWith(repository);
-    expect(UseCase.CreateUseCase).toHaveBeenCalledWith(repository);
-    expect(UseCase.UpdateUseCase).toHaveBeenCalledWith(repository);
-    expect(UseCase.DeleteUseCase).toHaveBeenCalledWith(repository);
   });
 
   it('should call repository.find', (done) => {

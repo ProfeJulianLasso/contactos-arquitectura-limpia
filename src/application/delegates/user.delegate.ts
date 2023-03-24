@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-import { UsuarioDomain } from '../../domain/models/usuario.model';
 import { IUserRepository } from '../../domain/repositories/usuario.repository';
 import {
   CreateUseCase,
@@ -7,36 +5,30 @@ import {
   FindUseCase,
   UpdateUseCase,
 } from '../use-case';
+import { IUseCase } from '../use-case/interface/use-case.interface';
 
-export class UserDelegate {
-  private createUseCase: CreateUseCase;
-  private deleteUseCase: DeleteUseCase;
-  private findUseCase: FindUseCase;
-  private updateUseCase: UpdateUseCase;
+export class UserDelegate implements IUseCase {
+  private delegate: IUseCase;
 
-  constructor(private readonly userRepository: IUserRepository) {
-    this.createUseCase = new CreateUseCase(userRepository);
-    this.deleteUseCase = new DeleteUseCase(userRepository);
-    this.findUseCase = new FindUseCase(userRepository);
-    this.updateUseCase = new UpdateUseCase(userRepository);
+  constructor(private readonly userRepository: IUserRepository) {}
+
+  execute<Response>(...args: any[]): Response {
+    return this.delegate.execute(...args);
   }
 
-  public createUser(user: UsuarioDomain): Observable<UsuarioDomain> {
-    return this.createUseCase.execute(user);
+  public toCreateUser(): void {
+    this.delegate = new CreateUseCase(this.userRepository);
   }
 
-  public deleteUser(id: string): Observable<boolean> {
-    return this.deleteUseCase.execute(id);
+  public toDeleteUser(): void {
+    this.delegate = new DeleteUseCase(this.userRepository);
   }
 
-  public findUsers(): Observable<UsuarioDomain[]> {
-    return this.findUseCase.execute();
+  public toFindUsers(): void {
+    this.delegate = new FindUseCase(this.userRepository);
   }
 
-  public updateUser(
-    id: string,
-    user: UsuarioDomain,
-  ): Observable<UsuarioDomain> {
-    return this.updateUseCase.execute(id, user);
+  public toUpdateUser(): void {
+    this.delegate = new UpdateUseCase(this.userRepository);
   }
 }

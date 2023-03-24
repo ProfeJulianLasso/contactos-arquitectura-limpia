@@ -15,28 +15,33 @@ import { UsuarioDTO } from '../dto/usuario.dto';
 
 @Controller()
 export class UsuarioAPI {
-  private readonly userDelegate: UserDelegate;
+  private readonly useCase: UserDelegate;
+
   constructor(private readonly usuarioRepository: UsuarioRepository) {
-    this.userDelegate = new UserDelegate(this.usuarioRepository);
+    this.useCase = new UserDelegate(this.usuarioRepository);
   }
 
   @Get()
   find(): Observable<Usuario[]> {
-    return this.userDelegate.findUsers();
+    this.useCase.toFindUsers();
+    return this.useCase.execute();
   }
 
   @Post()
   create(@Body() user: UsuarioDTO): Observable<Usuario> {
-    return this.userDelegate.createUser(user);
+    this.useCase.toCreateUser();
+    return this.useCase.execute(user);
   }
 
   @Put(':id')
   update(@Param() id: string, @Body() user: UsuarioDTO): Observable<Usuario> {
-    return this.userDelegate.updateUser(id, user);
+    this.useCase.toUpdateUser();
+    return this.useCase.execute(id, user);
   }
 
   @Delete(':id')
   delete(@Param() id: string): Observable<boolean> {
-    return this.userDelegate.deleteUser(id);
+    this.useCase.toDeleteUser();
+    return this.useCase.execute(id);
   }
 }
