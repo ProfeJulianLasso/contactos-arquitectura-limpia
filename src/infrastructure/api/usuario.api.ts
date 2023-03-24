@@ -8,16 +8,16 @@ import {
   Put,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { UserDelegator } from 'src/application/delegators/user.delegator';
+import { UserDelegate } from '../../application/delegates/user.delegate';
 import { Usuario } from '../database/models/usuario.model';
 import { UsuarioRepository } from '../database/repositories/usuario.repository';
 import { UsuarioDTO } from '../dto/usuario.dto';
 
 @Controller()
 export class UsuarioAPI {
-  private readonly userDelegate: UserDelegator;
+  private readonly userDelegate: UserDelegate;
   constructor(private readonly usuarioRepository: UsuarioRepository) {
-    this.userDelegate = new UserDelegator(this.usuarioRepository);
+    this.userDelegate = new UserDelegate(this.usuarioRepository);
   }
 
   @Get()

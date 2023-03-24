@@ -8,7 +8,7 @@ import {
   UpdateUseCase,
 } from '../use-case';
 
-export class UserDelegator {
+export class UserDelegate {
   private createUseCase: CreateUseCase;
   private deleteUseCase: DeleteUseCase;
   private findUseCase: FindUseCase;

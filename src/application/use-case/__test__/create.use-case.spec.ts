@@ -21,6 +21,7 @@ describe('CreateUseCase', () => {
   it('should call repository.create', (done) => {
     // Arrange
     const _id = '641c65deff0153dd0f36bf5';
+    const payload = { nombre: 'pedro' };
     const mockData = { nombre: 'pedro' };
     const expectedData = { _id, nombre: 'pedro' };
     const expectedInstanceType = Observable<UsuarioDomain>;
@@ -34,7 +35,7 @@ describe('CreateUseCase', () => {
     jest.spyOn(repository, 'create').mockReturnValue(stubCreate());
 
     // Act
-    const result = useCase.execute(mockData);
+    const result = useCase.execute(payload);
 
     // Assert
     expect(repository.create).toHaveBeenCalledWith(mockData);
