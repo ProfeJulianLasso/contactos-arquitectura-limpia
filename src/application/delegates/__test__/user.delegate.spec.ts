@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { UsuarioDomain } from 'src/domain/models/usuario.model';
+import { UsuarioDomain } from '../../../domain/models/usuario.model';
 import { IUserRepository } from '../../../domain/repositories/usuario.repository';
 import * as UseCase from '../../use-case';
 import { UserDelegate } from '../user.delegate';
@@ -66,14 +66,15 @@ describe('UserDelegate', () => {
     } as any);
 
     // Act
-    const delegator = new UserDelegate(repository);
-    const result = delegator.findUsers();
+    delegator.toFindUsers();
+    const result = delegator.execute<Observable<UsuarioDomain[]>>();
 
     // Assert
     expect(stubFind).toHaveBeenCalled();
     expect(result).toBeInstanceOf(expectedInstanceType);
     result.subscribe({
       next: (value) => {
+        console.log('value', value);
         expect(value).toEqual(expectedData);
         done();
       },
@@ -98,8 +99,8 @@ describe('UserDelegate', () => {
     } as any);
 
     // Act
-    const delegator = new UserDelegate(repository);
-    const result = delegator.createUser(payload);
+    delegator.toCreateUser();
+    const result = delegator.execute<Observable<UsuarioDomain>>(payload);
 
     // Assert
     expect(stubCreate).toHaveBeenCalledWith(payload);
@@ -130,8 +131,8 @@ describe('UserDelegate', () => {
     } as any);
 
     // Act
-    const delegator = new UserDelegate(repository);
-    const result = delegator.updateUser(_id, payload);
+    delegator.toUpdateUser();
+    const result = delegator.execute<Observable<UsuarioDomain>>(_id, payload);
 
     // Assert
     expect(stubUpdate).toHaveBeenCalledWith(_id, payload);
@@ -162,8 +163,8 @@ describe('UserDelegate', () => {
     } as any);
 
     // Act
-    const delegator = new UserDelegate(repository);
-    const result = delegator.deleteUser(payload);
+    delegator.toDeleteUser();
+    const result = delegator.execute<Observable<boolean>>(payload);
 
     // Assert
     expect(stubDelete).toHaveBeenCalledWith(payload);

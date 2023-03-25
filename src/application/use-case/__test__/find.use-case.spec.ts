@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { UsuarioDomain } from 'src/domain/models/usuario.model';
-import { IUserRepository } from 'src/domain/repositories/usuario.repository';
+import { UsuarioDomain } from '../../../domain/models/usuario.model';
+import { IUserRepository } from '../../../domain/repositories/usuario.repository';
 import { FindUseCase } from '../find.use-case';
 
 describe('FindUseCase', () => {

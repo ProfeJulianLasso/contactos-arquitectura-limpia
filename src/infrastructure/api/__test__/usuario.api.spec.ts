@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Observable } from 'rxjs';
-import { UsuarioDTO } from 'src/infrastructure/dto/usuario.dto';
 import * as delegate from '../../../application/delegates/user.delegate';
 import { UsuarioDomain } from '../../../domain/models/usuario.model';
 import { Usuario } from '../../database/models/usuario.model';
 import { UsuarioRepository } from '../../database/repositories/usuario.repository';
+import { UsuarioDTO } from '../../dto/usuario.dto';
 import { UsuarioAPI } from '../usuario.api';
 
 jest.mock('../../../application/delegates/user.delegate');
@@ -48,12 +48,9 @@ describe('UsuarioController', () => {
       }),
   );
 
-  jest.spyOn(delegate, 'UserDelegate').mockReturnValue({
-    findUsers: stubFind,
-    createUser: stubCreate,
-    updateUser: stubUpdate,
-    deleteUser: stubDelete,
-  } as any);
+  jest
+    .spyOn(delegate, 'UserDelegate')
+    .mockReturnValue({} as any as delegate.UserDelegate);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -71,6 +68,7 @@ describe('UsuarioController', () => {
 
   it('should be defined', () => {
     expect(api).toBeDefined();
+    expect(delegate.UserDelegate).toHaveBeenCalledWith(repository);
   });
 
   it('should call repository.find', (done) => {
@@ -80,12 +78,15 @@ describe('UsuarioController', () => {
       { nombre: 'juan' },
     );
     const expectedInstanceType = Array<Usuario>;
+    (api as any).useCase = {
+      toFindUsers: jest.fn(),
+      execute: stubFind,
+    };
 
     // Act
     const result = api.find();
 
     // Assert
-    expect(delegate.UserDelegate).toHaveBeenCalledWith(repository);
     expect(stubFind).toHaveBeenCalled();
     result.subscribe({
       next: (value) => {
@@ -99,13 +100,16 @@ describe('UsuarioController', () => {
   it('should call repository.create', (done) => {
     // Arrange
     const body = { nombre: 'pedro' };
-    const expectedData = { ...body, _id } as Usuario;
+    const expectedData = { _id, nombre: 'pedro' } as Usuario;
+    (api as any).useCase = {
+      toCreateUser: jest.fn(),
+      execute: stubCreate,
+    };
 
     // Act
     const result = api.create(body);
 
     // Assert
-    expect(delegate.UserDelegate).toHaveBeenCalledWith(repository);
     expect(stubCreate).toHaveBeenCalledWith(body);
     result.subscribe({
       next: (value) => {
@@ -118,7 +122,11 @@ describe('UsuarioController', () => {
   it('should call repository.update', (done) => {
     // Arrange
     const body = { nombre: 'pedro' };
-    const expectedData = { ...body, _id } as Usuario;
+    const expectedData = { _id, nombre: 'pedro' } as Usuario;
+    (api as any).useCase = {
+      toUpdateUser: jest.fn(),
+      execute: stubUpdate,
+    };
 
     // Act
     const result = api.update(_id, body);
@@ -138,6 +146,10 @@ describe('UsuarioController', () => {
     // Arrange
     const _id = '641c65deff0153dd0f36bf5';
     const expectedData = true;
+    (api as any).useCase = {
+      toDeleteUser: jest.fn(),
+      execute: stubDelete,
+    };
 
     // Act
     const result = api.delete(_id);

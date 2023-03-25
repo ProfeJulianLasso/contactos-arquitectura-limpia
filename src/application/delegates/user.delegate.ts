@@ -16,19 +16,19 @@ export class UserDelegate implements IUseCase {
     return this.delegate.execute(...args);
   }
 
-  public toCreateUser(): void {
+  toCreateUser(): void {
     this.delegate = new CreateUseCase(this.userRepository);
   }
 
-  public toDeleteUser(): void {
+  toDeleteUser(): void {
     this.delegate = new DeleteUseCase(this.userRepository);
   }
 
-  public toFindUsers(): void {
+  toFindUsers(): void {
     this.delegate = new FindUseCase(this.userRepository);
   }
 
-  public toUpdateUser(): void {
+  toUpdateUser(): void {
     this.delegate = new UpdateUseCase(this.userRepository);
   }
 }

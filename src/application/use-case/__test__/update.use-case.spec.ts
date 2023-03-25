@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { UsuarioDomain } from 'src/domain/models/usuario.model';
+import { UsuarioDomain } from '../../../domain/models/usuario.model';
 import { IUserRepository } from '../../../domain/repositories/usuario.repository';
 import { UpdateUseCase } from '../update.use-case';
 
