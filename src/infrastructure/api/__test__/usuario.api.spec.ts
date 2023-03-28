@@ -14,39 +14,6 @@ describe('UsuarioController', () => {
   let repository: UsuarioRepository;
 
   const _id = '641c65deff0153dd0f36bf5';
-  const mockData = new Array<UsuarioDomain>(
-    { nombre: 'pedro' },
-    { nombre: 'juan' },
-  );
-
-  const stubFind = jest.fn(
-    () =>
-      new Observable<UsuarioDomain[]>((subscriber) => {
-        subscriber.next(mockData);
-        subscriber.complete();
-      }),
-  );
-  const stubCreate = jest.fn(
-    (data: UsuarioDTO) =>
-      new Observable<UsuarioDomain>((subscriber) => {
-        subscriber.next({ ...data, _id } as UsuarioDomain);
-        subscriber.complete();
-      }),
-  );
-  const stubUpdate = jest.fn(
-    (_id: string, data: UsuarioDTO) =>
-      new Observable<UsuarioDomain>((subscriber) => {
-        subscriber.next({ ...data, _id } as UsuarioDomain);
-        subscriber.complete();
-      }),
-  );
-  const stubDelete = jest.fn(
-    () =>
-      new Observable<boolean>((subscriber) => {
-        subscriber.next(true);
-        subscriber.complete();
-      }),
-  );
 
   jest
     .spyOn(delegate, 'UserDelegate')
@@ -73,9 +40,20 @@ describe('UsuarioController', () => {
 
   it('should call repository.find', (done) => {
     // Arrange
+    const mockData = new Array<UsuarioDomain>(
+      { nombre: 'pedro' },
+      { nombre: 'juan' },
+    );
     const expectedData = new Array<Usuario>(
       { nombre: 'pedro' },
       { nombre: 'juan' },
+    );
+    const stubFind = jest.fn(
+      () =>
+        new Observable<UsuarioDomain[]>((subscriber) => {
+          subscriber.next(mockData);
+          subscriber.complete();
+        }),
     );
     const expectedInstanceType = Array<Usuario>;
     (api as any).useCase = {
@@ -100,6 +78,13 @@ describe('UsuarioController', () => {
   it('should call repository.create', (done) => {
     // Arrange
     const body = { nombre: 'pedro' };
+    const stubCreate = jest.fn(
+      (data: UsuarioDTO) =>
+        new Observable<UsuarioDomain>((subscriber) => {
+          subscriber.next({ ...data, _id } as UsuarioDomain);
+          subscriber.complete();
+        }),
+    );
     const expectedData = { _id, nombre: 'pedro' } as Usuario;
     (api as any).useCase = {
       toCreateUser: jest.fn(),
@@ -122,6 +107,13 @@ describe('UsuarioController', () => {
   it('should call repository.update', (done) => {
     // Arrange
     const body = { nombre: 'pedro' };
+    const stubUpdate = jest.fn(
+      (_id: string, data: UsuarioDTO) =>
+        new Observable<UsuarioDomain>((subscriber) => {
+          subscriber.next({ ...data, _id } as UsuarioDomain);
+          subscriber.complete();
+        }),
+    );
     const expectedData = { _id, nombre: 'pedro' } as Usuario;
     (api as any).useCase = {
       toUpdateUser: jest.fn(),
@@ -145,6 +137,13 @@ describe('UsuarioController', () => {
   it('should call repository.delete', (done) => {
     // Arrange
     const _id = '641c65deff0153dd0f36bf5';
+    const stubDelete = jest.fn(
+      () =>
+        new Observable<boolean>((subscriber) => {
+          subscriber.next(true);
+          subscriber.complete();
+        }),
+    );
     const expectedData = true;
     (api as any).useCase = {
       toDeleteUser: jest.fn(),

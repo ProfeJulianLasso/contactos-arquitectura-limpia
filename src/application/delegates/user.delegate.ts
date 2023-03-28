@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { IUserRepository } from '../../domain/repositories/usuario.repository';
 import {
   CreateUseCase,
@@ -12,7 +13,7 @@ export class UserDelegate implements IUseCase {
 
   constructor(private readonly userRepository: IUserRepository) {}
 
-  execute<Response>(...args: any[]): Response {
+  execute<Response>(...args: any[]): Observable<Response> {
     return this.delegate.execute(...args);
   }
 

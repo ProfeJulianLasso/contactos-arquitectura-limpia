@@ -47,12 +47,14 @@ describe('RickAndMortyService', () => {
     const result = service.getCharacter(idCharacter);
 
     // Assert
-    result.subscribe((response) => {
-      expect(response.data).toEqual(expected);
-      expect(httpService.get).toHaveBeenCalledWith(
-        `https://rickandmortyapi.com/api/character/${idCharacter}`,
-      );
-      done();
+    result.subscribe({
+      next: (response) => {
+        expect(response.data).toEqual(expected);
+        expect(httpService.get).toHaveBeenCalledWith(
+          `https://rickandmortyapi.com/api/character/${idCharacter}`,
+        );
+        done();
+      },
     });
   });
 });

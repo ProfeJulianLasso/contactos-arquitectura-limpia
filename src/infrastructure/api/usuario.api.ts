@@ -24,7 +24,7 @@ export class UsuarioAPI {
   @Get()
   find(): Observable<Usuario[]> {
     this.useCase.toFindUsers();
-    return this.useCase.execute();
+    return this.useCase.execute<Usuario[]>();
   }
 
   @Post()
